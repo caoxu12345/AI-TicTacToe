@@ -1,4 +1,5 @@
 import random
+import time
 
 # Two playes : X and O
 
@@ -72,6 +73,9 @@ class TicTacToe:
 
 class ArtificialIntelligence:
 
+    def __init__(self):
+        self.thinking_time = 0
+
     def get_enemy(self, player):
         if player == "X":
             return "O"
@@ -117,6 +121,7 @@ class ArtificialIntelligence:
         return best
 
     def choose_move(self, tic_tac_toe):
+        start_thinking_time = time.time()
         limit = -2
         ai_player = "O"
         choices = []
@@ -138,6 +143,7 @@ class ArtificialIntelligence:
                     choices = [move]
                 elif val == limit:
                     choices.append(move)
+            self.thinking_time += (time.time() - start_thinking_time)
             return random.choice(choices)
 
 if __name__ == "__main__":
@@ -175,6 +181,8 @@ if __name__ == "__main__":
         if tic_tac_toe.complete() or tic_tac_toe.has_winner():
             break
     print(tic_tac_toe.find_winner())
+    print("Artificial intelligence has thought during : ",
+           ai_player.thinking_time, " seconds")
 
     '''tic_tac_toe = TicTacToe([None, "O", None, "X", "X", "O", None, "X", None])
     tic_tac_toe.X_set = { 3, 4, 7}
