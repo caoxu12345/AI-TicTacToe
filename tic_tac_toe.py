@@ -120,6 +120,45 @@ class ArtificialIntelligence:
                         best = val
         return best
 
+    def alphabeta(self, node, player, alpha, beta):
+        if node.has_winner():
+            result = node.find_winner()
+            if result == "X win":
+                return -1
+            elif result == "O win":
+                return 1
+            else:
+                return 0
+        if node.complete():
+            result = node.find_winner()
+            if result == "X win":
+                return -1
+            elif result == "O win":
+                return 1
+            else:
+                return 0
+        for move in node.available_moves():
+            node.make_move(move, player)
+            val = self.alphabeta(node, self.get_enemy(player), alpha, beta)
+            # Admin rights ...
+            node.square[move] = None
+            node.X_set.discard(move)
+            node.O_set.discard(move)
+            if player == "O":
+                if val > alpha:
+                    alpha = val
+                elif alpha >= beta:
+                    return beta
+            else:
+                if val < beta:
+                    beta = val
+                elif beta <= alpha:
+                    return alpha
+        if player == "O":
+            return alpha
+        else:
+            return beta
+
     def choose_move(self, tic_tac_toe):
         start_thinking_time = time.time()
         limit = -2
@@ -132,7 +171,9 @@ class ArtificialIntelligence:
             for move in tic_tac_toe.available_moves():
                 # Admin rights ...
                 tic_tac_toe.make_move(move, ai_player)
-                val = self.minimax(tic_tac_toe, self.get_enemy(ai_player))
+                # val = self.minimax(tic_tac_toe, self.get_enemy(ai_player))
+                val = self.alphabeta(tic_tac_toe,
+                                     self.get_enemy(ai_player), -2, 2)
                 # Admin rights ...
                 tic_tac_toe.square[move] = None
                 tic_tac_toe.X_set.discard(move)
@@ -147,7 +188,6 @@ class ArtificialIntelligence:
             return random.choice(choices)
 
 if __name__ == "__main__":
-    # tic_tac_toe = TicTacToe(["X", "O", None, "X", None, "O", None, None, None])
     tic_tac_toe = TicTacToe()
     player_one = "X"
     ai_player = ArtificialIntelligence()
