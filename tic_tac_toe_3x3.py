@@ -86,7 +86,8 @@ class TicTacToe3x3:
 if __name__ == "__main__":
     tic_tac_toe = TicTacToe3x3()
     player_one = "X"
-    ai_player = ArtificialIntelligence(algorithm_chosen="minimax")
+    ai_player = ArtificialIntelligence(algorithm_chosen="alphabeta_heuristic",
+                                       depth=5)
     # player_two = "O"
     tic_tac_toe.show()
     while not tic_tac_toe.complete():

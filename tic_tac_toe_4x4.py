@@ -8,7 +8,7 @@ class TicTacToe4x4:
         {12, 13, 14, 15},
         {0, 4, 8, 12}, {1, 5, 9, 13}, {2, 6, 10, 14},
         {3, 7, 11, 15},
-        {0, 5, 10, 15}, {3, 6, 8, 12})
+        {0, 5, 10, 15}, {3, 6, 9, 12})
 
     winners = ('X win', 'Draw', 'O win')
 
@@ -70,10 +70,24 @@ class TicTacToe4x4:
                 return self.winners[2]
         return self.winners[1]
 
+    def heuristic(self, player):
+        X_score = 10
+        O_score = 10
+        for winning_combo in self.winning_combos:
+            if self.X_set.intersection(winning_combo):
+                O_score -= 1
+            if self.O_set.intersection(winning_combo):
+                X_score -= 1
+        if player == "X":
+            return X_score - O_score
+        else:
+            return O_score - X_score
+
 if __name__ == "__main__":
     tic_tac_toe = TicTacToe4x4()
     player_one = "X"
-    ai_player = ArtificialIntelligence()
+    ai_player = ArtificialIntelligence(algorithm_chosen="alphabeta_heuristic",
+                                       depth=5)
     # player_two = "O"
     tic_tac_toe.show()
     while not tic_tac_toe.complete():

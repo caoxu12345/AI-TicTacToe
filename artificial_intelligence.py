@@ -196,7 +196,7 @@ class ArtificialIntelligence:
             tic_tac_toe.square[move] = None
             tic_tac_toe.X_set.discard(move)
             tic_tac_toe.O_set.discard(move)
-            # print("move:", move, "causes:",val)
+            # print("move:", move, "causes:", val)
             if val > limit:
                 limit = val
                 choices = [move]
