@@ -1,28 +1,29 @@
 from artificial_intelligence import ArtificialIntelligence
 # Two playes : X and O
-# http://cwoebker.com/posts/tic-tac-toe
 
 
-class TicTacToe3x3:
+class TicTacToe4x4:
     winning_combos = (
-        {0, 1, 2}, {3, 4, 5}, {6, 7, 8},
-        {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
-        {0, 4, 8}, {2, 4, 6})
+        {0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11},
+        {12, 13, 14, 15},
+        {0, 4, 8, 12}, {1, 5, 9, 13}, {2, 6, 10, 14},
+        {3, 7, 11, 15},
+        {0, 5, 10, 15}, {3, 6, 8, 12})
 
     winners = ('X win', 'Draw', 'O win')
 
     def __init__(self, square=[]):
         if len(square) == 0:
-            self.square = [None for i in range(9)]
+            self.square = [None for i in range(16)]
         else:
             self.square = square
         self.X_set = set()
         self.O_set = set()
 
     def show(self):
-        for i in range(0, 9, 3):
+        for i in range(0, 16, 4):
             line = ""
-            for case in self.square[i:i+3]:
+            for case in self.square[i:i+4]:
                 if case == "X":
                     line += "X "
                 elif case == "O":
@@ -69,30 +70,16 @@ class TicTacToe3x3:
                 return self.winners[2]
         return self.winners[1]
 
-    def heuristic(self, player):
-        X_score = 8
-        O_score = 8
-        for winning_combo in self.winning_combos:
-            if self.X_set.intersection(winning_combo):
-                O_score -= 1
-            if self.O_set.intersection(winning_combo):
-                X_score -= 1
-        if player == "X":
-            return X_score - O_score
-        else:
-            return O_score - X_score
-
-
 if __name__ == "__main__":
-    tic_tac_toe = TicTacToe3x3()
+    tic_tac_toe = TicTacToe4x4()
     player_one = "X"
-    ai_player = ArtificialIntelligence(algorithm_chosen="minimax")
+    ai_player = ArtificialIntelligence()
     # player_two = "O"
     tic_tac_toe.show()
     while not tic_tac_toe.complete():
         # Player one move
         try:
-            player_one_move = int(input("Choose a move (0-8) : "))
+            player_one_move = int(input("Choose a move (0-15) : "))
         except ValueError:
             print("Wrong value, try again")
             continue
@@ -119,12 +106,3 @@ if __name__ == "__main__":
     print(tic_tac_toe.find_winner())
     print("Artificial intelligence has thought during : ",
           ai_player.thinking_time, " seconds")
-    '''tic_tac_toe = TicTacToe3x3(["X", None, None, None,
-    None, None, None, None, None])
-    tic_tac_toe.X_set = {0}
-    #tic_tac_toe.O_set = {}
-    tic_tac_toe.show()
-    ai_player = ArtificialIntelligence()
-    ai_move = ai_player.choose_move(tic_tac_toe)
-    tic_tac_toe.make_move(ai_move, "O")
-    tic_tac_toe.show()'''
