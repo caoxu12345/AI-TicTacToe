@@ -4,10 +4,11 @@ import time
 
 class ArtificialIntelligence:
 
-    def __init__(self, algorithm_chosen="minimax", symbol="O"):
+    def __init__(self, algorithm_chosen="minimax", symbol="O", depth=5):
         self.thinking_time = 0
         self.algorithm_chosen = algorithm_chosen
         self.symbol = symbol
+        self.depth = depth
 
     def get_enemy(self, player):
         if player == "X":
@@ -184,11 +185,12 @@ class ArtificialIntelligence:
                                      self.get_enemy(ai_player), -2, 2)
             elif self.algorithm_chosen == "minimax_heuristic":
                 val = self.minimax_heuristic(tic_tac_toe,
-                                             self.get_enemy(ai_player), 5)
+                                             self.get_enemy(ai_player),
+                                             self.depth)
             elif self.algorithm_chosen == "alphabeta_heuristic":
                 val = self.alphabeta_heuristic(tic_tac_toe,
                                                self.get_enemy(ai_player),
-                                               -200, 200, 5)
+                                               -200, 200, self.depth)
             # print(val)
             # Admin rights ...
             tic_tac_toe.square[move] = None
