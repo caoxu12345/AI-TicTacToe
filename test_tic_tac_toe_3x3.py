@@ -4,6 +4,8 @@ from artificial_intelligence import MinimaxArtificialIntelligence
 from artificial_intelligence import AlphaBetaArtificialIntelligence
 from artificial_intelligence import MinimaxHeuristicArtificialIntelligence
 from artificial_intelligence import AlphaBetaHeuristicArtificialIntelligence
+from artificial_intelligence import \
+    AlphaBetaWithHashTableArtificialIntelligence
 
 
 class TicTacToe3x3Tests(unittest.TestCase):
@@ -93,6 +95,11 @@ class TicTacToe3x3Tests(unittest.TestCase):
         tic_tac_toe.X_set = {0, 6, 8}
         tic_tac_toe.O_set = {1, 3, 7}
         self.assertEqual(tic_tac_toe.heuristic('O'), -1)
+
+    def test_tic_tac_toe_get_hash_key_value(self):
+        tic_tac_toe = TicTacToe3x3(["X", "O", None, "O", None,
+                                    None, "X", "O", "X"])
+        self.assertEqual(tic_tac_toe.get_hash_key_value(), 210100212)
 
 
 class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
@@ -222,6 +229,33 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
                     break
             result_list.append(tic_tac_toe.find_winner())
         self.assertEqual(result_list, ["Draw" for i in range(5)])
+
+    def test_alphabeta_hashtable_against_alphabeta(self):
+        result_list = []
+        for i in range(15):
+            first_ai_player = \
+                AlphaBetaWithHashTableArtificialIntelligence(symbol="O")
+            second_ai_player = AlphaBetaArtificialIntelligence(symbol="X")
+            tic_tac_toe = TicTacToe3x3()
+
+            while not tic_tac_toe.complete():
+                # AI one
+                first_ai_move = first_ai_player.choose_move(
+                                                        tic_tac_toe)
+                tic_tac_toe.make_move(first_ai_move,
+                                      first_ai_player.symbol)
+                if tic_tac_toe.complete() or tic_tac_toe.has_winner():
+                    break
+
+                # AI two
+                second_ai_move = second_ai_player.choose_move(
+                                                        tic_tac_toe)
+                tic_tac_toe.make_move(second_ai_move,
+                                      second_ai_player.symbol)
+                if tic_tac_toe.complete() or tic_tac_toe.has_winner():
+                    break
+            result_list.append(tic_tac_toe.find_winner())
+        self.assertEqual(result_list, ["Draw" for i in range(15)])
 
     def test_minimax_against_human_strategy(self):
         result_list = []

@@ -1,5 +1,7 @@
 from artificial_intelligence import MinimaxArtificialIntelligence
 from artificial_intelligence import AlphaBetaArtificialIntelligence
+from artificial_intelligence import \
+    AlphaBetaWithHashTableArtificialIntelligence
 import time
 # Two playes : X and O
 # http://cwoebker.com/posts/tic-tac-toe
@@ -83,6 +85,17 @@ class TicTacToe3x3:
             return X_score - O_score
         else:
             return O_score - X_score
+
+    def get_hash_key_value(self):
+        key = 0
+        for index, value in enumerate(self.square):
+            if value == "X":
+                key += 2*10**(9-1-index)
+            elif value == "O":
+                key += 1*10**(9-1-index)
+            else:
+                key += 0*10**(9-1-index)
+        return key
 
 
 if __name__ == "__main__":

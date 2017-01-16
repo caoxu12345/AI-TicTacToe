@@ -308,3 +308,89 @@ class AlphaBetaHeuristicArtificialIntelligence(ArtificialIntelligence):
                 choices.append(move)
         self.thinking_time += (time.time() - start_thinking_time)
         return random.choice(choices)
+
+
+class AlphaBetaWithHashTableArtificialIntelligence(ArtificialIntelligence):
+
+    def __init__(self, symbol="O"):
+        super(AlphaBetaWithHashTableArtificialIntelligence,
+              self).__init__(symbol)
+        self.hashtable = {}
+
+    def alphabeta(self, node, player, alpha, beta):
+        if node.has_winner():
+            result = node.find_winner()
+            hash_key = node.get_hash_key_value()
+            final_result = self.get_final_score(result)
+            self.hashtable[hash_key] = final_result
+            return final_result
+
+        if node.complete():
+            result = node.find_winner()
+            hash_key = node.get_hash_key_value()
+            final_result = self.get_final_score(result)
+            self.hashtable[hash_key] = final_result
+            return final_result
+
+        for move in node.available_moves():
+            node.make_move(move, player)
+            hash_key = node.get_hash_key_value()
+            if hash_key in self.hashtable:
+                val = self.hashtable[hash_key]
+                print(val)
+            else:
+                val = self.alphabeta(node, self.get_enemy(player), alpha, beta)
+                self.hashtable[hash_key] = val
+            # Admin rights ...
+            node.square[move] = None
+            node.X_set.discard(move)
+            node.O_set.discard(move)
+            if player == self.symbol:
+                if val > alpha:
+                    alpha = val
+                elif alpha >= beta:
+                    return beta
+            else:
+                if val < beta:
+                    beta = val
+                elif beta <= alpha:
+                    return alpha
+        if player == self.symbol:
+            return alpha
+        else:
+            return beta
+
+    def choose_move(self, tic_tac_toe):
+        start_thinking_time = time.time()
+        limit = -2
+        ai_player = self.symbol
+        choices = []
+        available_moves = tic_tac_toe.available_moves()
+        # if len(available_moves) == len(tic_tac_toe.square):
+        # return 4
+        # else:
+        for move in tic_tac_toe.available_moves():
+            # print("next move :", move)
+            # Admin rights ...
+            tic_tac_toe.make_move(move, ai_player)
+            hash_key = tic_tac_toe.get_hash_key_value()
+            if hash_key in self.hashtable:
+                val = self.hashtable[hash_key]
+                print(val)
+            else:
+                val = self.alphabeta(tic_tac_toe, self.get_enemy(ai_player),
+                                     -2, 2)
+                self.hashtable[hash_key] = val
+            # print(val)
+            # Admin rights ...
+            tic_tac_toe.square[move] = None
+            tic_tac_toe.X_set.discard(move)
+            tic_tac_toe.O_set.discard(move)
+            print("move:", move, "causes:", val)
+            if val > limit:
+                limit = val
+                choices = [move]
+            elif val == limit:
+                choices.append(move)
+        self.thinking_time += (time.time() - start_thinking_time)
+        return random.choice(choices)
