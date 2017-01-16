@@ -1,4 +1,6 @@
-from artificial_intelligence import ArtificialIntelligence
+from artificial_intelligence import MinimaxArtificialIntelligence
+from artificial_intelligence import AlphaBetaArtificialIntelligence
+import time
 # Two playes : X and O
 # http://cwoebker.com/posts/tic-tac-toe
 
@@ -86,12 +88,13 @@ class TicTacToe3x3:
 if __name__ == "__main__":
     tic_tac_toe = TicTacToe3x3()
     player_one = "X"
-    ai_player = ArtificialIntelligence(algorithm_chosen="alphabeta_heuristic",
-                                       depth=5)
+    ai_player = AlphaBetaArtificialIntelligence()
     # player_two = "O"
     tic_tac_toe.show()
+    human_time_reflexion = 0
     while not tic_tac_toe.complete():
         # Player one move
+        start_time = time.time()
         try:
             player_one_move = int(input("Choose a move (0-8) : "))
         except ValueError:
@@ -104,6 +107,7 @@ if __name__ == "__main__":
             print("This case is not in range or already chosen, try again")
             continue
         tic_tac_toe.show()
+        human_time_reflexion = time.time() - start_time
         if tic_tac_toe.complete() or tic_tac_toe.has_winner():
             break
 
@@ -120,6 +124,8 @@ if __name__ == "__main__":
     print(tic_tac_toe.find_winner())
     print("Artificial intelligence has thought during : ",
           ai_player.thinking_time, " seconds")
+    print("You has thought during : ",
+          human_time_reflexion, " seconds")
     '''tic_tac_toe = TicTacToe3x3(["X", None, None, None,
     None, None, None, None, None])
     tic_tac_toe.X_set = {0}

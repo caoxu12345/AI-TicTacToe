@@ -1,6 +1,9 @@
 import unittest
 from tic_tac_toe_3x3 import TicTacToe3x3
-from artificial_intelligence import ArtificialIntelligence
+from artificial_intelligence import MinimaxArtificialIntelligence
+from artificial_intelligence import AlphaBetaArtificialIntelligence
+from artificial_intelligence import MinimaxHeuristicArtificialIntelligence
+from artificial_intelligence import AlphaBetaHeuristicArtificialIntelligence
 
 
 class TicTacToe3x3Tests(unittest.TestCase):
@@ -94,15 +97,32 @@ class TicTacToe3x3Tests(unittest.TestCase):
 
 class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
 
+    def test_minimax_artificial_intelligence_creation(self):
+        minimax_artificial_intelligence = MinimaxArtificialIntelligence()
+        self.assertEqual(minimax_artificial_intelligence.symbol, "O")
+
+    def test_alphabeta_artificial_intelligence_creation(self):
+        alphabeta_artificial_intelligence = AlphaBetaArtificialIntelligence()
+        self.assertEqual(alphabeta_artificial_intelligence.symbol, "O")
+
+    def test_minimax_heuristic_artificial_intelligence_creation(self):
+        minimax_heuristic_artificial_intelligence = \
+            MinimaxHeuristicArtificialIntelligence()
+        self.assertEqual(minimax_heuristic_artificial_intelligence.symbol, "O")
+        self.assertEqual(minimax_heuristic_artificial_intelligence.depth, 5)
+
+    def test_alphabeta_heuristic_artificial_intelligence_creation(self):
+        alphabeta_heuristic_artificial_intelligence = \
+            AlphaBetaHeuristicArtificialIntelligence()
+        self.assertEqual(alphabeta_heuristic_artificial_intelligence.symbol,
+                         "O")
+        self.assertEqual(alphabeta_heuristic_artificial_intelligence.depth, 5)
+
     def test_minimax_against_minimax(self):
         result_list = []
         for i in range(5):
-            first_ai_player = ArtificialIntelligence(
-                                            algorithm_chosen="minimax",
-                                            symbol="O")
-            second_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="minimax",
-                                        symbol="X")
+            first_ai_player = MinimaxArtificialIntelligence()
+            second_ai_player = MinimaxArtificialIntelligence(symbol="X")
             tic_tac_toe = TicTacToe3x3()
 
             while not tic_tac_toe.complete():
@@ -127,12 +147,8 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
     def test_alphabeta_against_alphabeta(self):
         result_list = []
         for i in range(5):
-            first_ai_player = ArtificialIntelligence(
-                                            algorithm_chosen="alphabeta",
-                                            symbol="O")
-            second_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="alphabeta",
-                                        symbol="X")
+            first_ai_player = AlphaBetaArtificialIntelligence()
+            second_ai_player = AlphaBetaArtificialIntelligence(symbol="X")
             tic_tac_toe = TicTacToe3x3()
 
             while not tic_tac_toe.complete():
@@ -157,12 +173,8 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
     def test_minimax_heuristic_against_alphabeta(self):
         result_list = []
         for i in range(5):
-            first_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="minimax_heuristic",
-                                        symbol="O")
-            second_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="alphabeta",
-                                        symbol="X")
+            first_ai_player = MinimaxArtificialIntelligence()
+            second_ai_player = AlphaBetaArtificialIntelligence(symbol="X")
             tic_tac_toe = TicTacToe3x3()
 
             while not tic_tac_toe.complete():
@@ -187,12 +199,9 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
     def test_alphabeta_heuristic_against_alphabeta(self):
         result_list = []
         for i in range(5):
-            first_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="alphabeta_heuristic",
-                                        symbol="O")
-            second_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="alphabeta",
-                                        symbol="X")
+            first_ai_player = \
+                AlphaBetaHeuristicArtificialIntelligence(symbol="O")
+            second_ai_player = AlphaBetaArtificialIntelligence(symbol="X")
             tic_tac_toe = TicTacToe3x3()
 
             while not tic_tac_toe.complete():
@@ -217,9 +226,7 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
     def test_minimax_against_human_strategy(self):
         result_list = []
         for i in range(30):
-            first_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="minimax",
-                                        symbol="O")
+            first_ai_player = MinimaxArtificialIntelligence(symbol="O")
             tic_tac_toe = TicTacToe3x3(["X", None, None, None, "O", None, None,
                                         None, "X"])
             tic_tac_toe.X_set = {0, 8}
@@ -230,9 +237,7 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
         self.assertNotIn(6, result_list)
         result_list = []
         for i in range(30):
-            first_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="minimax",
-                                        symbol="O")
+            first_ai_player = MinimaxArtificialIntelligence(symbol="O")
             tic_tac_toe = TicTacToe3x3(["X", None, None, None, None, None,
                                         None, None, None])
             tic_tac_toe.X_set = {0}
@@ -243,9 +248,7 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
     def test_alphabeta_against_human_strategy(self):
         result_list = []
         for i in range(40):
-            first_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="alphabeta",
-                                        symbol="O")
+            first_ai_player = AlphaBetaArtificialIntelligence(symbol="O")
             tic_tac_toe = TicTacToe3x3(["X", None, None, None, "O", None, None,
                                         None, "X"])
             tic_tac_toe.X_set = {0, 8}
@@ -256,9 +259,7 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
         self.assertNotIn(6, result_list)
         result_list = []
         for i in range(40):
-            first_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="alphabeta",
-                                        symbol="O")
+            first_ai_player = AlphaBetaArtificialIntelligence(symbol="O")
             tic_tac_toe = TicTacToe3x3(["X", None, None, None, None, None,
                                         None, None, None])
             tic_tac_toe.X_set = {0}
@@ -269,9 +270,8 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
     def test_minimax_heuristic_against_human_strategy(self):
         result_list = []
         for i in range(50):
-            first_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="minimax_heuristic",
-                                        symbol="O")
+            first_ai_player = \
+                MinimaxHeuristicArtificialIntelligence(symbol="O")
             tic_tac_toe = TicTacToe3x3(["X", None, None, None, "O", None, None,
                                         None, "X"])
             tic_tac_toe.X_set = {0, 8}
@@ -282,9 +282,8 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
         self.assertNotIn(6, result_list)
         result_list = []
         for i in range(50):
-            first_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="minimax_heuristic",
-                                        symbol="O")
+            first_ai_player = \
+                MinimaxHeuristicArtificialIntelligence(symbol="O")
             tic_tac_toe = TicTacToe3x3(["X", None, None, None, None, None,
                                         None, None, None])
             tic_tac_toe.X_set = {0}
@@ -296,9 +295,8 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
     def test_alphabeta_heuristic_against_human_strategy(self):
         result_list = []
         for i in range(50):
-            first_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="alphabeta_heuristic",
-                                        symbol="O")
+            first_ai_player = \
+                AlphaBetaHeuristicArtificialIntelligence(symbol="O")
             tic_tac_toe = TicTacToe3x3(["X", None, None, None, "O", None, None,
                                         None, "X"])
             tic_tac_toe.X_set = {0, 8}
@@ -308,9 +306,8 @@ class ArtificialIntelligenceTicTacToe3x3Tests(unittest.TestCase):
         self.assertNotIn(2, result_list)
         self.assertNotIn(6, result_list)
         for i in range(50):
-            first_ai_player = ArtificialIntelligence(
-                                        algorithm_chosen="alphabeta_heuristic",
-                                        symbol="O")
+            first_ai_player = \
+                AlphaBetaHeuristicArtificialIntelligence(symbol="O")
             tic_tac_toe = TicTacToe3x3(["X", None, None, None, None, None,
                                         None, None, None])
             tic_tac_toe.X_set = {0}
